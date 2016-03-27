@@ -67,16 +67,16 @@ action :create do
           tokenpath = "#{new_resource.wwwroot}/#{authz.http01.filename}"
 
           tokenroot = directory ::File.dirname(tokenpath) do
-            owner     new_resource.owner
-            group     new_resource.group
-            mode      00755
+            owner     node['letsencrypt']['token_owner'] || new_resource.owner
+            group     node['letsencrypt']['token_group'] || new_resource.group
+            mode      node['letsencrypt']['token_dir_mode'] || 00755
             recursive true
           end
 
           auth_file = file tokenpath do
-            owner   new_resource.owner
-            group   new_resource.group
-            mode    00644
+            owner     node['letsencrypt']['token_owner'] || new_resource.owner
+            group     node['letsencrypt']['token_group'] || new_resource.group
+            mode      node['letsencrypt']['token_file_mode'] || 00644
             content authz.http01.file_content
           end
           validation = acme_validate_immediately(authz, 'http01', tokenroot, auth_file)
