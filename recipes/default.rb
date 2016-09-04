@@ -20,8 +20,8 @@
 
 chef_gem 'acme-client' do
   action :install
-  version '0.2.4'
-  compile_time true
+  version '0.4.0'
+  compile_time true if respond_to?(:compile_time)
 end
 
 require 'acme-client'
